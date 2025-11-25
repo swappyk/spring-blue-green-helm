@@ -1,0 +1,30 @@
+image:
+  repository: your-docker-repo/spring-demo
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  name: spring-blue-green
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: spring-demo.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: spring-demo-tls
+      hosts:
+        - spring-demo.local
+
+blue:
+  replicaCount: 1
+  name: blue
+
+green:
+  replicaCount: 1
+  name: green
